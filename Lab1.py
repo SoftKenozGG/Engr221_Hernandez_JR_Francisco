@@ -4,5 +4,5 @@
 # initialize message as a string
 message = "Go Gators!"
 
-#priints message "Go Gators!"
+#prints message "Go Gators!"
 print(message) 
