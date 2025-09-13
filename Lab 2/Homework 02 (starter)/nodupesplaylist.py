@@ -61,32 +61,48 @@ class NoDupesPlaylist():
 
     # Insert a song to the end of the playlist
     def insert_song(self, song):
-        # If the playlist is empty, initialize it with size 1
+
+         # If the playlist is empty, initialize it with size 1
         if self.get_num_songs() == 0:
             self.songs = [None] * 1
+            self.max_num_songs = 0
             self.num_songs = 0
-        #If song is a duplicate do not insert it
+
+        #Make sure there are no duplicates
         if self.search_by_title(song.title) == -1:
             
-             # Insert the new song at the end of the playlist if it is not a duplicate
-            for item in self.songs:
-                songs += [self.songs]
+            # If the playlist is full, add one to size
+            if self.get_num_songs() == self.max_num_songs:
+                new_max_num_songs = self.max_num_songs + 1
+                new_songs = [None] * new_max_num_songs
+            else:
+                # Create a new list with the new size
+                new_songs = [None] * self.max_num_songs
 
-        # Update the length of the playlist
-        self.num_songs += 1
+                # Copy over the songs from the old list to the new list
+            for i in range(self.get_num_songs()):
+                new_songs[i] = self.songs[i]
+
+            self.songs = new_songs
+            self.max_num_songs = new_max_num_songs
+
+            self.songs[self.get_num_songs()] = song
+
+            self.num_songs += 1
+            # Update the length of the playlist
 
 
     # Return the index of the given song title in the playlist,
     # or return -1 if the song is not in the playlist
     def search_by_title(self, song_title):
         # Only search the indices with songs
-        for i in range(self.num_songs):
+        for i in range(self.get_num_songs()):
             # Check the value at the current index 
             if self.songs[i].title == song_title:
-                # Return the true if we found the song
+                # Return the index if we found the song
                 return i 
             
-        # If we got here, we did not find the song so return false
+        # If we got here, we did not find the song so return -1
         return -1
     
     # Delete all occurrences of a song title in the playlist

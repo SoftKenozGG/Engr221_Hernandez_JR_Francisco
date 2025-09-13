@@ -132,15 +132,4 @@ if __name__ == '__main__':
             Song("Your Idol", "Saja Boys"),
             Song("Soda Pop", "Saja Boys")]
     p = Playlist(song)
-    print(p.songs)
-    print(p.get_num_songs())
-    p.insert_song(Song("Golden", "HUNTR/X"))
-    print(p.songs)
-    print(p.get_num_songs())
-    print(p.delete_by_title("Golden"))
-    print(p.songs)
-    print(p.get_num_songs())
-
-    #for i in range(3):
-    #p.insert_song(song)
-    #print(p.songs)   
+    p.traverse()
