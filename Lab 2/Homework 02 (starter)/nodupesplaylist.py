@@ -23,15 +23,16 @@ class NoDupesPlaylist():
         for item in initial_songs:
             isDuplicate = False
             for  uniqueItem in new_song_list:
-
+                #Returns true if duplicate is found and breaks loop
                 if item == uniqueItem:
                     isDuplicate = True
                     break
-
+            #If no duplicate is found, adds song to new list
             if not isDuplicate:
                 new_song_list += [item]
-
+        #Sets the songs to the new list without duplicates
         self.songs = new_song_list
+        #Updates the number of songs and max number of songs
         self.num_songs = len(self.songs)
         self.max_num_songs = len(self.songs)
 
@@ -82,10 +83,12 @@ class NoDupesPlaylist():
                 # Copy over the songs from the old list to the new list
             for i in range(self.get_num_songs()):
                 new_songs[i] = self.songs[i]
-
+            
+            # Update the playlist to the new list and size  
             self.songs = new_songs
+            # Update the max size
             self.max_num_songs = new_max_num_songs
-
+            # Insert the new song at the end of the playlist
             self.songs[self.get_num_songs()] = song
 
             self.num_songs += 1
