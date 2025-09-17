@@ -1,7 +1,7 @@
 """
 Author: Francisco Hernandez JR
-Filename: playlist.py
-Description: Implementation of a playlist as an array with duplicates
+Filename: nodupesplaylist.py
+Description: Implementation of a playlist as an array without duplicates
 """
 
 
@@ -9,17 +9,32 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from song import Song
 
-class Playlist():
-    # The constructor is run every time a new Playlist object is created
+class NoDupesPlaylist():
+    # The constructor is run every time a new NoDupesPlaylist object is created
     # initial_songs is a list containing the Songs you can have in the playlist
+    #Checks to see if playlist has duplicates
     def __init__(self, initial_songs=None):
-        # Stores the songs in the playlist
-        # It is initially a list of songs of objects or None
-        self.songs = initial_songs
-        # The current number of songs in the playlist
-        self.num_songs = len(initial_songs)
-        # The maximum number of songs the playlist can have
-        self.max_num_songs = len(initial_songs)
+        #initialize the nodupe playlist
+        new_song_list = []
+        self.max_num_songs = 0
+        self.num_songs = 0
+
+        #Runs through the initial songs and checks for duplicates
+        for item in initial_songs:
+            isDuplicate = False
+            for  uniqueItem in new_song_list:
+                #Returns true if duplicate is found and breaks loop
+                if item == uniqueItem:
+                    isDuplicate = True
+                    break
+            #If no duplicate is found, adds song to new list
+            if not isDuplicate:
+                new_song_list += [item]
+        #Sets the songs to the new list without duplicates
+        self.songs = new_song_list
+        #Updates the number of songs and max number of songs
+        self.num_songs = len(self.songs)
+        self.max_num_songs = len(self.songs)
 
     ###########
     # Methods #
@@ -47,37 +62,47 @@ class Playlist():
 
     # Insert a song to the end of the playlist
     def insert_song(self, song):
-        # If the playlist is empty, initialize it with size 1
+
+         # If the playlist is empty, initialize it with size 1
         if self.get_num_songs() == 0:
             self.songs = [None] * 1
-            self.max_num_songs = 1
+            self.max_num_songs = 0
             self.num_songs = 0
 
-        # If the playlist is full, double its size
-        if self.get_num_songs() == self.max_num_songs:
-            self.new_max_num_songs = self.get_num_songs() * 2
-            # Create a new list with double the size
-            new_songs = [None] * self.new_max_num_songs
-            # Copy over the songs from the old list to the new list
+        #Make sure there are no duplicates
+        if self.search_by_title(song.title) == -1:
+            
+            # If the playlist is full, add one to size
+            if self.get_num_songs() == self.max_num_songs:
+                new_max_num_songs = self.max_num_songs + 1
+                new_songs = [None] * new_max_num_songs
+            else:
+                # Create a new list with the new size
+                new_songs = [None] * self.max_num_songs
+
+                # Copy over the songs from the old list to the new list
             for i in range(self.get_num_songs()):
                 new_songs[i] = self.songs[i]
+            
+            # Update the playlist to the new list and size  
             self.songs = new_songs
-            self.max_num_songs = self.new_max_num_songs
+            # Update the max size
+            self.max_num_songs = new_max_num_songs
+            # Insert the new song at the end of the playlist
+            self.songs[self.get_num_songs()] = song
 
-        # Insert the new song at the end of the playlist
-        self.songs[self.get_num_songs()] = song
+            self.num_songs += 1
+            # Update the length of the playlist
 
-        # Update the length of the playlist
-        self.num_songs += 1
 
     # Return the index of the given song title in the playlist,
     # or return -1 if the song is not in the playlist
     def search_by_title(self, song_title):
         # Only search the indices with songs
-        for i in range(self.num_songs):
+        for i in range(self.get_num_songs()):
             # Check the value at the current index 
             if self.songs[i].title == song_title:
-                # Return the index
+                # Return the index if we found the song
                 return i 
             
         # If we got here, we did not find the song so return -1
@@ -95,9 +120,9 @@ class Playlist():
 
             # If the song was not found, we cannot delete it
             if idx == -1 and count == 0:
-                return 0
+                return False
             elif idx == -1 and count > 0:
-                return count
+                return True
 
             # If the song is found, delete it
             if self.songs[i].title == song_title:
@@ -117,7 +142,7 @@ class Playlist():
         self.num_songs -= 1
 
         # Return the number of occurrences deleted
-        return count
+        return True
 
     # Print all songs in the playlist
     def traverse(self):
@@ -128,8 +153,17 @@ if __name__ == '__main__':
     # You can test your code here
     song = [Song("Golden", "HUNTR/X"),
             Song("Ordinary", "Alex Warren"),
+            Song("Golden", "HUNTR/X"),
             Song("What I Want", "Morgan Wallen ft. Tate McRae"),
             Song("Your Idol", "Saja Boys"),
-            Song("Soda Pop", "Saja Boys")]
-    p = Playlist(song)
+            Song("Soda Pop", "Saja Boys"),
+            Song("What I Want", "Morgan Wallen ft. Tate McRae"),
+            Song("What I Want", "Morgan Wallen ft. Tate McRae"),
+            Song("Golden", "HUNTR/X")]
+    p = NoDupesPlaylist(song)
+    p.traverse()
+    print(p.get_num_songs())
+    p.insert_song(Song("Soda Pop", "Saja Boys"))
+    p.insert_song(Song("Soda Pop", "Saja Boys"))
+    p.insert_song(Song("What I Want", "Morgan Wallen ft. Tate McRae"))
     p.traverse()
