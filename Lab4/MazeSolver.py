@@ -1,5 +1,7 @@
 """
-WRITE YOUR PROGRAM HEADER HERE
+Name: Francisco Hernandez JR
+MazeSolver.py
+Description: Find the path by depth-first-search
 """
 
 import sys, os 
@@ -7,6 +9,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from SearchStructures import Stack, Queue
 from Maze import Maze
+from Tile import Tile
 
 class MazeSolver:
 
@@ -15,16 +18,10 @@ class MazeSolver:
         self.ss = searchStructure()  # Initialize a searchStructure object (Stack or Queue)
 
     def tileIsVisitable(self, row, col):
-        # ~~~~~~~~
-        # Write your tileIsVisitable() implementation here
-        # ~~~~~~~~
-        pass
+        return  Tile(row,col).getIsWall or Tile(row,col).isVisited
 
     def solve(self):
-        # ~~~~~~~~
-        # Write your solve() implementation here
-        # ~~~~~~~~
-        pass
+        
 
      # Add any other helper functions you might want here
 
