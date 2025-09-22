@@ -1,5 +1,3 @@
 {
-  "sorting_tests.py::test_insertion_sort_inplace": true,
-  "sorting_tests.py::test_insertion_sort": true,
-  "sorting_tests.py::test_bubble_sort": true
+  "sorting_tests.py::test_insertion_sort_inplace": true
 }

@@ -6,26 +6,42 @@ Description: Implementation of sorting algorithms.
 
 import time, random
 
+# Sorts a list using the insertion sort algorithm
 def insertion_sort(list_to_sort):   
+    # Run through 1 to len(list_to_sort)
     for indx in range(len(list_to_sort)):
         j = indx
+        # Move elements of list_to_sort[0..i-1], that are
+        # greater than list_to_sort[i], to one position ahead
         while j > 0 and list_to_sort[j-1] > list_to_sort[j]:
-            temp = list_to_sort[j-1]
-            list_to_sort[j-1]=list_to_sort[j]
-            list_to_sort[j]=temp
+            # save the value at index j
+            arr = list_to_sort[j]
+            # swap the values at index j and j-1
+            list_to_sort[j] = list_to_sort[j-1]
+            # save the value at index j-1
+            list_to_sort[j-1] = arr
             j -= 1
-        print(indx)
-        print(list_to_sort[indx])
-        print(list_to_sort)
-        print(len(list_to_sort))
+    return list_to_sort
 
 def bubble_sort(list_to_sort):
-    j = 0
-    for i in len(list_to_sort) -1-i:
-        if list_to_sort[j] > list_to_sort[j+1]:
-            list_to_sort[j] = list_to_sort[j+1]
-        print(list_to_sort)
-    pass
+
+    n = len(list_to_sort)
+    
+    # Traverse through all array elements
+    for i in range(n):
+        swapped = False
+        
+        # Last i elements are already sorted, so no need to check them
+        for j in range(0, n - i - 1):
+            if list_to_sort[j] > list_to_sort[j + 1]:
+                # Swap if the element found is greater than the next element
+                list_to_sort[j], list_to_sort[j + 1] = list_to_sort[j + 1], list_to_sort[j]
+                swapped = True
+        
+        # If no two elements were swapped, the list is already sorted
+        if not swapped:
+            break
+    return list_to_sort
 
 def create_random_list(length):
     """ Returns a list of the given length with random values.
@@ -53,5 +69,5 @@ def get_runtime(function_to_run, list_length):
     return end_time - start_time
 
 if __name__ == '__main__':
-    insertion_sort([7,5,9,10,3,2,1,13,12,4,2,2,2,1,2,3,5,4,31,90,67,6])
-    #print(get_runtime(insertion_sort, 100000))
+    print(get_runtime(insertion_sort, 10000))
+    print(get_runtime(bubble_sort, 10000))
