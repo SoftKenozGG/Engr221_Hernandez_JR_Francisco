@@ -9,7 +9,6 @@ sys.path.append(os.path.dirname(__file__))
 
 from SearchStructures import Stack, Queue
 from Maze import Maze
-from Tile import Tile
 
 class MazeSolver:
 
@@ -17,19 +16,56 @@ class MazeSolver:
         self.maze = maze             # The maze to solve
         self.ss = searchStructure()  # Initialize a searchStructure object (Stack or Queue)
 
-    def tileIsVisitable(self, row, col):
-        return  Tile(row,col).getIsWall or Tile(row,col).isVisited
+    def tileIsVisitable(self, row, col):#Check if the tile is visitable
+        tile = self.maze.contents[row][col]
+        return  not tile.getIsWall() and not tile.isVisited()
 
     def solve(self):
-        
+        start = self.maze.start
+        goal = self.maze.goal
+        self.ss.add(start)
+        while not self.ss.isEmpty():
+            current = self.ss.remove()
+            current.visit()
+            if current == goal:
+                return current
+            row = current.getRow()
+            col = current.getCol()
 
-     # Add any other helper functions you might want here
+            # Check the tile north
+            if row > 0 and self.tileIsVisitable(row - 1, col):
+                north = self.maze.contents[row - 1][col]
+                north.setPrevious(current)
+                self.ss.add(north)
+                
+            # Check the tile south
+            if row < self.maze.num_rows - 1 and self.tileIsVisitable(row + 1, col):
+                south = self.maze.contents[row + 1][col]
+                south.setPrevious(current)
+                self.ss.add(south)
 
+            # Check the tile to the east
+            if col < self.maze.num_cols - 1 and self.tileIsVisitable(row, col + 1):
+                east = self.maze.contents[row][col + 1]
+                east.setPrevious(current)
+                self.ss.add(east)
+
+            # Check the tile to the west
+            if col > 0 and self.tileIsVisitable(row, col - 1):
+                west = self.maze.contents[row][col - 1]
+                west.setPrevious(current)
+                self.ss.add(west)
+
+        return None
+
+    # Get the path from Start to Goal as a list of tiles
     def getPath(self):
-        # ~~~~~~~~
-        # Write your getPath() implementation here
-        # ~~~~~~~~
-        pass 
+        path = []
+        current = self.maze.goal
+        while current is not None:
+            path.append(current)
+            current = current.getPrevious()
+        return path
 
     # Print the maze with the path of the found solution
     # from Start to Goal. If there is no solution, just
@@ -55,10 +91,16 @@ class MazeSolver:
 
 if __name__ == "__main__":
     # The maze to solve
-    maze = Maze(["____",
-                 "S##G",
-                 "__#_",
-                 "____"])
+    maze = Maze(["##____#_##",
+                     "#____##__#",
+                     "_S#_______",
+                     "__##_____#",
+                     "____####__",
+                     "#____##___",
+                     "#__##___#_",
+                     "___##___##",
+                     "#___#__G__",
+                     "_______###",])
     # Initialize the MazeSolver to be solved with a Stack
     solver = MazeSolver(maze, Stack)
     # Solve the maze
