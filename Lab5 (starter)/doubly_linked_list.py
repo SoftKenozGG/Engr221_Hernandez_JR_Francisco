@@ -14,25 +14,30 @@ class DoublyLinkedList():
         self.__last_node = None 
 
     def is_empty(self):
-        pass
+        return self.__first_node == None
 
     def first(self):
-        pass
+        if self.is_empty():
+            raise Exception("Error: List is empty, cannot return first  value")
+        return self.__first_node
     
     def get_first_node(self):
-        pass
+        return self.__first_node
 
     def get_last_node(self):
-        pass
+        return self.__last_node
     
     def set_first_node(self, node):
-        pass
+        self.__first_node = node
 
     def set_last_node(self, node):
-        pass
+        self.__last_node = node
 
     def find(self, value):
-        pass
+        node = self.get_first_node()
+
+        while node != None:
+            if node.
 
     def insert_front(self, value):
         pass
