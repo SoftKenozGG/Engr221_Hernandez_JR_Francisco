@@ -12,7 +12,6 @@ class Node():
     ###########
     # Methods #
     ###########
-
     # Return whether the given node is the first in the list
     def is_first(self):
         return self.__next_node == None

@@ -1,5 +1,6 @@
 """
-WRITE YOUR PROGRAM HEADER HERE
+Lab 5, an introduction to Linked List
+Francisco Hernandez JR
 """
 
 class DoubleNode():
@@ -14,36 +15,36 @@ class DoubleNode():
     #####
         
     def is_first(self):
-        pass
+        return self.__previous_node == None
         
     def is_last(self):
-        pass
+        return self.__next_node == None
 
     #####
     # Getters
     #####
 
     def get_value(self):
-        pass
+        return self.__value
     
     def get_next_node(self):
-        pass
+        return self.__next_node
 
     def get_previous_node(self):
-        pass
+        return self.__previous_node
 
     #####
     # Setters
     #####
 
     def set_value(self, new_value):
-        pass
+        self.__value = new_value
 
     def set_next_node(self, new_next):
-        pass
+        self.__next_node = new_next
 
     def set_previous_node(self, new_previous):
-        pass
+        self.__previous_node = new_previous
 
     #####
     # Helpers
@@ -55,7 +56,7 @@ class DoubleNode():
         return True
     
     def __str__(self):
-        pass
+        return str(self.__value)
 
 if __name__ == "__main__":
     pass
