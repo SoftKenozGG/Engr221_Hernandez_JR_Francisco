@@ -1,6 +1,7 @@
 """
-Lab 5, an introduction to Linked List
 Francisco Hernandez JR
+double_node.py
+Represents a Node in a doubly linked list
 """
 
 class DoubleNode():
