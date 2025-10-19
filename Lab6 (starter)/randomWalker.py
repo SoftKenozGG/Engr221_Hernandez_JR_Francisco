@@ -55,7 +55,40 @@ def rwsteps(start, low, hi):
         return 1 + rwsteps(newstart, low, hi)  # counts one step, recurses for the rest!
 
 def rwstepsLoop(start, low, hi):
-    pass
+    """ rwstepsLoop models a random walker which
+        * is currently at start 
+        * is in a walkway from low (usually 0) to hi (max location) 
+          
+        rwstepsLoop returns the # of steps taken 
+        when the walker reaches an edge
+    """
+    walkway = "_"*(hi-low)    # create a walkway of underscores
+    S = (start-low)           # this is our sleepwalker's location, start-low
+
+    walkway = walkway[:S] + "S" + walkway[S:]  # put our sleepwalker, "S", there
+
+    walkway = " " + walkway + " "              # surround with spaces, for now...
+
+    print(walkway, "    ", start, low, hi)     # print everything to keep track...
+    time.sleep(0.05)
+
+    steps = 0
+    current_position = start
+
+    # Loop that continues until the walker reaches an edge
+    while current_position > low and current_position < hi:
+        current_position += rs()  # takes one step
+        steps += 1 #Keep track of steps taken
+
+         # this is our sleepwalker's location, start-low
+        S = (current_position - low)
+        walkway = "_" * (hi - low)
+        walkway = walkway[:S] + "S" + walkway[S:]
+        walkway = " " + walkway + " "
+        print(walkway, "    ", current_position, low, hi)
+        time.sleep(0.05)
+
+    return steps
 
 if __name__ == '__main__':
-    print(rs())
+    print(rwstepsLoop(5, 0, 10))
