@@ -1,7 +1,7 @@
 """
-WRITE YOUR PROGRAM HEADER HERE
-
-Adapted from UCSD CSE12
+Author: Francisco Hernandez JR
+Filename: myHashMap.py
+Description: Implementing a hash map.
 """
 
 class MyHashMap:
@@ -35,8 +35,9 @@ class MyHashMap:
     Raise an exception if the key is None. """
     def put(self, key, value):
         keyHash = hash(key)
-        # TODO: write your put implementation here
-        pass 
+        if keyHash == None:
+            raise "Exception, Key is None"
+        
 
     """
     Replaces the value that maps to the given key if it is present.
@@ -82,8 +83,7 @@ class MyHashMap:
     Return true if the MyHashMap contains no elements, and 
     false otherwise. """
     def isEmpty(self):
-        # TODO: Write your isEmpty implementation here
-        pass 
+        return self.buckets == None 
 
     """
     Return true if the specified key is in this MyHashMap. 
