@@ -1,1 +1,5 @@
-{}
+{
+  "hashmap_tests.py::test_put_not_isempty_no_loadfactor": true,
+  "hashmap_tests.py::test_put_not_isempty_loadfactor": true,
+  "hashmap_tests.py::test_put_isempty": true
+}
