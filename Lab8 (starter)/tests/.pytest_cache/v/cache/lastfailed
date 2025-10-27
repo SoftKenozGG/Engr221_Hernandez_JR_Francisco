@@ -1,3 +1,10 @@
 {
-  "bst_tests.py::test_bst_search_empty": true
+  "bst_tests.py::test_bst_search_empty": true,
+  "bst_tests.py::test_bst_search_present": true,
+  "bst_tests.py::test_bst_findSuccessor": true,
+  "bst_tests.py::test_bst_delete_leaf": true,
+  "bst_tests.py::test_bst_delete_child": true,
+  "bst_tests.py::test_bst_delete_children": true,
+  "bst_tests.py::test_bst_delete_stick": true,
+  "bst_tests.py::test_bst_traverse": true
 }

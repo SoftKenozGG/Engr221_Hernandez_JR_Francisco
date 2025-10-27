@@ -55,10 +55,7 @@ class BinarySearchTree:
 
     def __searchHelp(self, node, goalKey):
         # A recursive helper method to search for a node with the given key.
-        if node == None:
-            return False
-        elif goalKey == node.key:
-            return True
+        pass
 
     def lookup(self, goal):
         """ TODO: LOOKUP DOCSTRING HERE """
@@ -67,6 +64,7 @@ class BinarySearchTree:
     def findSuccessor(self, subtreeRoot):
         """ TODO: FINDSUCCESSOR DOCSTRING HERE """
         return self.__findSuccessorHelp(subtreeRoot)
+    pass
     
     def __findSuccessorHelp(self, node):
         """ TODO: __FINDSUCCESSOR DOCSTRING HERE """
@@ -83,12 +81,15 @@ class BinarySearchTree:
         pass
 
     def traverse(self) -> None:
-        """ TODO: TRAVERSE DOCSTRING HERE """
+        # Traverses the tree in-order and prints the keys and values.
         self.__traverseHelp(self.__root)
 
     def __traverseHelp(self, node) -> None:
-        """ TODO: __TRAVERSEHELP DOCSTRING HERE """
-        pass
+        # A recursive helper method to traverse the tree in-order.
+        if node != None:
+            self.__traverseHelp(node.left)
+            print("Key: {}, Value: {}".format(node.key, node.value))
+            self.__traverseHelp(node.right)
 
     def __str__(self) -> str:
         """ Represent the tree as a string. Formats as 
