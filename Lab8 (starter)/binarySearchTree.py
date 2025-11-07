@@ -103,15 +103,13 @@ class BinarySearchTree:
                 return node.right
             elif node.right is None:
                 return node.left
-            else:
-                # Node with two children: Get the inorder successor (smallest in the left subtree)
-                temp = self.__findSuccessorHelp(node)
-                # Copy the inorder successor's content to this node
-                node.key = temp.key
-                node.value = temp.value
-                # Delete the inorder successor
-                node.left = self.__deleteHelp(node.left, temp.key)
-                
+            # Node with two children: Get the inorder successor (smallest in the left subtree)
+            temp = self.__findSuccessorHelp(node)
+            # Copy the inorder successor's content to this node
+            node.key = temp.key
+            node.value = temp.value
+            # Delete the inorder successor
+            node.left = self.__deleteHelp(node.left, temp.key)    
         return node
 
     def traverse(self) -> None:
