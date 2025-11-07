@@ -55,11 +55,16 @@ class BinarySearchTree:
 
     def __searchHelp(self, node, goalKey):
         # A recursive helper method to search for a node with the given key.
-        pass
+        if goalKey == node.key:
+            return node.key, node.value
+        elif goalKey < node.key:
+            return self.__searchHelp(node.left, goalKey)
+        else:
+            return self.__searchHelp(node.right, goalKey)
 
     def lookup(self, goal):
         """ TODO: LOOKUP DOCSTRING HERE """
-        pass
+        
 
     def findSuccessor(self, subtreeRoot):
         """ TODO: FINDSUCCESSOR DOCSTRING HERE """
