@@ -55,16 +55,18 @@ class BinarySearchTree:
 
     def __searchHelp(self, node, goalKey):
         # A recursive helper method to search for a node with the given key.
-        if goalKey == node.key:
-            return node.key, node.value
+        if node == None:
+            return None
         elif goalKey < node.key:
             return self.__searchHelp(node.left, goalKey)
-        else:
+        elif goalKey > node.key:
             return self.__searchHelp(node.right, goalKey)
+        return node
 
+        
     def lookup(self, goal):
         """ TODO: LOOKUP DOCSTRING HERE """
-        
+        return self.search(goal)
 
     def findSuccessor(self, subtreeRoot):
         """ TODO: FINDSUCCESSOR DOCSTRING HERE """
@@ -73,7 +75,11 @@ class BinarySearchTree:
     
     def __findSuccessorHelp(self, node):
         """ TODO: __FINDSUCCESSOR DOCSTRING HERE """
-        pass
+        # The successor is the smallest key in the left subtree
+        current = node.left
+        while current.left != None and current != None:
+            current = current.left
+        return current
     
     def delete(self, deleteKey):
         """ TODO: DELETE DOCSTRING HERE """
@@ -83,7 +89,30 @@ class BinarySearchTree:
     
     def __deleteHelp(self, node, deleteKey):
         """ TODO: __DELETEHELP DOCSTRING HERE """
-        pass
+        """A recursive helper method to delete() method,
+           which deletes the node with the given key from the BST."""
+        if node is None:
+            return node
+        if deleteKey < node.key:
+            node.left = self.__deleteHelp(node.left, deleteKey)
+        elif deleteKey > node.key:
+            node.right = self.__deleteHelp(node.right, deleteKey)
+        else:
+            # Node with only one child or no child
+            if node.left is None:
+                return node.right
+            elif node.right is None:
+                return node.left
+            else:
+                # Node with two children: Get the inorder successor (smallest in the left subtree)
+                temp = self.__findSuccessorHelp(node)
+                # Copy the inorder successor's content to this node
+                node.key = temp.key
+                node.value = temp.value
+                # Delete the inorder successor
+                node.left = self.__deleteHelp(node.left, temp.key)
+                
+        return node
 
     def traverse(self) -> None:
         # Traverses the tree in-order and prints the keys and values.
@@ -93,7 +122,7 @@ class BinarySearchTree:
         # A recursive helper method to traverse the tree in-order.
         if node != None:
             self.__traverseHelp(node.left)
-            print("Key: {}, Value: {}".format(node.key, node.value))
+            print("({}, {})".format(node.key, node.value))
             self.__traverseHelp(node.right)
 
     def __str__(self) -> str:
