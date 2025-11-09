@@ -93,7 +93,7 @@ class BinarySearchTree:
            which deletes the node with the given key from the BST."""
         # Base case - If the node is None, return None
         if node is None:
-            return None
+           return None
         # if the key to be deleted is smaller than the node's key,
         # then it lies in left subtree
         if node.key > deleteKey:
@@ -106,10 +106,24 @@ class BinarySearchTree:
         elif node.key == deleteKey:
             # Node with only one child or no child
             if node.left is None:
-                return node.right
-            elif node.right is None:
-                temp = node.left
+                if node.right is None:
+                    return node.right # No children
+                # Node with only right child
+                # Replace node with its right child
+                temp = node.right
+                # Save the key and value of the right child
                 node.key, node.value = temp.key, temp.value
+                # Delete the right child
+                node.right = self.__deleteHelp(node.right, temp.key)
+            elif node.right is None:
+                if node.left is None:
+                    return node.left # No children
+                # Node with only left child
+                # Replace node with its left child
+                temp = node.left
+                # Save the key and value of the left child
+                node.key, node.value = temp.key, temp.value
+                # Delete the left child
                 node.left = self.__deleteHelp(node.left, temp.key)
             else:
                 # Node with two children: Get the inorder successor (smallest in the right subtree)
@@ -175,4 +189,4 @@ class BinarySearchTree:
             return "({}, {})".format(self.key, self.value)
         
 if __name__ == "__main__":
-    pass
+    pass # You can use this space for quick tests
