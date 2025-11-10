@@ -57,6 +57,7 @@ class BinarySearchTree:
         # A recursive helper method to search for a node with the given key.
         if node == None:
             return None
+        # If the key is found, return the node
         elif goalKey < node.key:
             return self.__searchHelp(node.left, goalKey)
         elif goalKey > node.key:
@@ -76,11 +77,10 @@ class BinarySearchTree:
     def __findSuccessorHelp(self, node):
         """ TODO: __FINDSUCCESSOR DOCSTRING HERE """
         # The successor is the smallest key in the left subtree
-        current = node.left
-        while current.left != None and current != None:
-            current = current.left
-        return current
-    
+        while node.left != None:
+            node = node.left
+        return node
+
     def delete(self, deleteKey):
         """ TODO: DELETE DOCSTRING HERE """
         if self.search(deleteKey):
@@ -91,25 +91,47 @@ class BinarySearchTree:
         """ TODO: __DELETEHELP DOCSTRING HERE """
         """A recursive helper method to delete() method,
            which deletes the node with the given key from the BST."""
+        # Base case - If the node is None, return None
         if node is None:
-            return node
-        if deleteKey < node.key:
+           return None
+        # if the key to be deleted is smaller than the node's key,
+        # then it lies in left subtree
+        if node.key > deleteKey:
             node.left = self.__deleteHelp(node.left, deleteKey)
-        elif deleteKey > node.key:
+        # if the key to be deleted is greater than the node's key,
+        # then it lies in right subtree
+        elif node.key < deleteKey:
             node.right = self.__deleteHelp(node.right, deleteKey)
-        else:
+        # if key is same as node's key, then this is the node to be deleted
+        elif node.key == deleteKey:
             # Node with only one child or no child
             if node.left is None:
-                return node.right
+                if node.right is None:
+                    return node.right # No children
+                # Node with only right child
+                # Replace node with its right child
+                temp = node.right
+                # Save the key and value of the right child
+                node.key, node.value = temp.key, temp.value
+                # Delete the right child
+                node.right = self.__deleteHelp(node.right, temp.key)
             elif node.right is None:
-                return node.left
-            # Node with two children: Get the inorder successor (smallest in the left subtree)
-            temp = self.__findSuccessorHelp(node)
-            # Copy the inorder successor's content to this node
-            node.key = temp.key
-            node.value = temp.value
-            # Delete the inorder successor
-            node.left = self.__deleteHelp(node.left, temp.key)    
+                if node.left is None:
+                    return node.left # No children
+                # Node with only left child
+                # Replace node with its left child
+                temp = node.left
+                # Save the key and value of the left child
+                node.key, node.value = temp.key, temp.value
+                # Delete the left child
+                node.left = self.__deleteHelp(node.left, temp.key)
+            else:
+                # Node with two children: Get the inorder successor (smallest in the right subtree)
+                temp = self.__findSuccessorHelp(node.right)
+                # Copy the inorder successor's content to this node
+                node.key, node.value = temp.key, temp.value
+                # Delete the inorder successor
+                node.right = self.__deleteHelp(node.right, temp.key)
         return node
 
     def traverse(self) -> None:
@@ -167,4 +189,4 @@ class BinarySearchTree:
             return "({}, {})".format(self.key, self.value)
         
 if __name__ == "__main__":
-    pass
+    pass # You can use this space for quick tests

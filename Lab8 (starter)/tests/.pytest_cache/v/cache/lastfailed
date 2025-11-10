@@ -1,12 +1,3 @@
 {
-  "bst_tests.py::test_bst_search_empty": true,
-  "bst_tests.py::test_bst_delete_stick": true,
-  "bst_tests.py::test_bst_isempty_true": true,
-  "bst_tests.py::test_bst_isempty_false": true,
-  "bst_tests.py::test_bst_getRoot_empty": true,
-  "bst_tests.py::test_bst_getRoot_nonempty": true,
-  "bst_tests.py::test_bst_search_present": true,
-  "bst_tests.py::test_bst_search_absent": true,
-  "bst_tests.py::test_bst_lookup_present": true,
-  "bst_tests.py::test_bst_delete_children": true
+  "bst_tests.py::test_bst_search_empty": true
 }
