@@ -5,7 +5,9 @@ Description: Creates and displays the graphics
 
 Assignment adapted from HMC CS60
 
-TODO Update this program header
+Author: Francisco Hernandez Jr.
+Date: November 16, 2025
+The BoardDisplay of the game, including drawing the board, snake, and food.
 """
 
 import pygame
@@ -27,6 +29,11 @@ class BoardDisplay:
 
         # Draw the board
         # TODO Add your code to draw the board here!
+        #Boarder drawn around the game area
+        for row in range(Preferences.NUM_CELLS_TALL):
+            for col in range(Preferences.NUM_CELLS_WIDE):
+                cell = gameData.getCell(row, col)
+                self.drawSquare(cell)
         # You may find the below drawSquare method helpful
 
         # Draw the game over message, if appropriate

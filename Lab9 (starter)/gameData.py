@@ -4,7 +4,9 @@ Represents the current state of the game.
 
 Assignment adapted from HMC CS60
 
-TODO Update this program header
+Author: Francisco Hernandez Jr.
+Date: November 16, 2025
+Class represents the current state of the game.
 """
 
 from boardCell import BoardCell
@@ -141,31 +143,68 @@ class GameData:
     ##########################
 
     # TODO Add method(s) here to support the controller's advanceSnake method!
+    def moveSnakeToCellAndGrow(self, nextCell):
+        """ Move the snake to the given cell and grow the snake by one cell.
+            Inputs: nextCell - the cell to move the snake's head to """
+        # Change the current head to a body cell
+        currentHead = self.getSnakeHead()
+        currentHead.becomeBody()
+
+        # Change the next cell to be the new head
+        nextCell.becomeHead()
+        # Add the next cell to the front of the snake cells list
+        self.__snakeCells.insert(0, nextCell)
+
+        # Remove the food from the food cells list
+        if nextCell in self.__foodCells:
+            self.__foodCells.remove(nextCell)
+
+        # Decrease the number of free cells
+        self.__freeCells -= 1
+
+    def moveSnakeToCell(self, nextCell):
+        """ Move the snake to the given cell without growing.
+            Inputs: nextCell - the cell to move the snake's head to """
+        # Change the current head to a body cell
+        currentHead = self.getSnakeHead()
+        currentHead.becomeBody()
+
+        # Change the next cell to be the new head
+        nextCell.becomeHead()
+        # Add the next cell to the front of the snake cells list
+        self.__snakeCells.insert(0, nextCell)
+
+        # Remove the tail cell
+        tailCell = self.getSnakeTail()
+        tailCell.becomeEmpty()
+        self.__snakeCells.pop()
+        self.__freeCells += 1
 
     ###############################
     # Methods to access neighbors #
     ###############################
 
+    # Returns the cell to the north of the given cell
     def getNorthNeighbor(self, cell): 
         """ Returns the cell to the north of the given cell """
-        return # TODO
-        
+        return self.getCell(cell.getRow() - 1, cell.getCol())
+    # Returns the cell to the south of the given cell
     def getSouthNeighbor(self, cell):
         """ Returns the cell to the south of the given cell """
-        return # TODO
-    
+        return self.getCell(cell.getRow() + 1, cell.getCol())
+    # Returns the cell to the east of the given cell
     def getEastNeighbor(self, cell):
         """ Returns the cell to the east of the given cell """
-        return # TODO
-    
+        return self.getCell(cell.getRow(), cell.getCol() + 1)
+    # Returns the cell to the west of the given cell
     def getWestNeighbor(self, cell):
         """ Returns the cell to the west of the given cell """
-        return # TODO
-    
+        return self.getCell(cell.getRow(), cell.getCol() - 1)
+    # Returns the cell to the north of the snake's head
     def getHeadNorthNeighbor(self):
         """ Returns the cell to the north of the snake's head """
         return self.getNorthNeighbor(self.getSnakeHead())
-    
+    # Returns the cell to the south of the snake's head
     def getHeadSouthNeighbor(self):
         """ Returns the cell to the south of the snake's head """
         return self.getSouthNeighbor(self.getSnakeHead())
@@ -181,7 +220,14 @@ class GameData:
     def getNextCellInDir(self):
         """ Returns the next cell in the snake's path based
             on its current direction (self.__currentMode) """
-        return # TODO
+        if self.__currentMode == self.SnakeMode.GOING_NORTH:
+            return self.getHeadNorthNeighbor()
+        elif self.__currentMode == self.SnakeMode.GOING_SOUTH:
+            return self.getHeadSouthNeighbor()
+        elif self.__currentMode == self.SnakeMode.GOING_EAST:
+            return self.getHeadEastNeighbor()
+        elif self.__currentMode == self.SnakeMode.GOING_WEST:
+            return self.getHeadWestNeighbor()
 
     def getNeighbors(self, center):
         """ Returns a set of the neighbors around the given cell """
@@ -253,8 +299,7 @@ class GameData:
     # Helper method(s) for reverse #
     ################################
     
-    # TODO Write method(s) here to help reverse the snake
-
+    # TODO Write method(s) here to help reverse the snake    
     # Steps:
     #  - Unlabel the head
     #  - Reverse the body

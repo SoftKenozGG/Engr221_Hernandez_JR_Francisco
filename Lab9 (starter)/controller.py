@@ -5,7 +5,9 @@ The Controller of the game, including handling key presses
 
 Adapted from HMC CS60
 
-TODO Update this program header
+Author: Francisco Hernandez Jr.
+Date: November 16, 2025
+The Controller of the game, including handling key presses
 """
 
 from preferences import Preferences
@@ -89,9 +91,21 @@ class Controller():
                 # Enter AI mode
                 elif event.key in self.Keypress.AI.value:
                     self.__data.setAIMode()
-                # Change directions
-                    
-                # TODO fill in to change snake direction
+                # Change directions based on keypress if key is valid
+                # Directions: up
+                elif event.key in self.Keypress.UP.value:
+                    self.__data.setDirectionNorth()
+                # Directions: down
+                elif event.key in self.Keypress.DOWN.value:
+                    self.__data.setDirectionSouth()
+                # Directions: left
+                elif event.key in self.Keypress.LEFT.value:
+                    self.__data.setDirectionWest()
+                # Directions: right
+                elif event.key in self.Keypress.RIGHT.value:
+                    self.__data.setDirectionEast()
+
+                
 
     def updateSnake(self):
         """ Move the snake forward one step, either in the current 
@@ -118,9 +132,16 @@ class Controller():
             self.gameOver()
         
         # If we eat food, update the state of the board
+        # TODO Tell __data that we ate food!
+        # Snake should grow by one cell after eating food
         elif nextCell.isFood():
             self.playSound_eat()
-            # TODO Tell __data that we ate food!
+            self.__data.moveSnakeToCellAndGrow(nextCell)
+        
+        # Otherwise, just move the snake forward
+        # Snake should remain the same length after moving
+        elif nextCell.isEmpty():
+            self.__data.moveSnakeToCell(nextCell)
 
         # TODO Possibly add code here, using the helper methods
         # in gameData.py under the "snake movement methods" header
@@ -155,7 +176,6 @@ class Controller():
     def getFirstCellInPath(self, foodCell):
         """ TODO COMMENT HERE """
 
-        # TODO
         
         return foodCell
     
@@ -163,8 +183,8 @@ class Controller():
         """ TODO COMMENT HERE """
 
         # TODO
-
         pass
+        
 
     def playSound_eat(self):
         """ Plays an eating sound """

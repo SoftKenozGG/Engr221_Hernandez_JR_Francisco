@@ -5,7 +5,9 @@ This is good practice to avoid "magic numbers"
 
 Assignment adapted from HMC CS60
 
-TODO Update this program header
+Author: Francisco Hernandez Jr.
+Date: November 16, 2025
+Stores values for constant variables.
 """
 
 import pygame
@@ -33,7 +35,7 @@ class Preferences:
     NUM_CELLS_TALL = 30 
 
     # Size of each cell in pixels
-    CELL_SIZE = 1
+    CELL_SIZE = 25
 
     # Dimensions of the board in pixels
     GAME_BOARD_WIDTH = NUM_CELLS_WIDE * CELL_SIZE
