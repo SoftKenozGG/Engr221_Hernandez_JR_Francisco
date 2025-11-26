@@ -27,6 +27,7 @@ class Controller():
         # How many frames have passed
         self.__numCycles = 0
 
+
         # Attempt to load any sounds and images
         try:
             pygame.mixer.init()
@@ -35,6 +36,7 @@ class Controller():
         except:
             print("Problem error loading audio / images")
             self.__audioEat = None
+
 
         # Initialize the board for a new game
         self.startNewGame()
@@ -155,8 +157,8 @@ class Controller():
         """ Uses BFS to search for the food closest to the head of the snake.
             Returns the *next* step the snake should take along the shortest path
             to the closest food cell. """
-        
-        # Parepare all the tiles to search
+
+        # Prepare all the tiles to search
         self.__data.resetCellsForSearch()
 
         # Initialize a queue to hold the tiles to search
@@ -167,24 +169,61 @@ class Controller():
         head.setAddedToSearchList()
         cellsToSearch.put(head)
 
-        # Search!
-        # TODO implement BFS here
+        # Perform the BFS to find the food
+        foodCell = None
+
+        while not cellsToSearch.empty():
+            # Get the next cell to search
+            currentCell = cellsToSearch.get()
+
+            # Check if we found food
+            if currentCell.isFood():
+                foodCell = currentCell
+                break
+
+            # Check all neighbors
+            for neighbor in self.__data.getNeighbors(currentCell):
+                #Ignore walls and snake body
+                if neighbor.isWall() or neighbor.isBody():
+                    continue
+
+                # Ignore cells already added to the search list
+                if neighbor.alreadyAddedToSearchList():
+                    continue
+
+                neighbor.setAddedToSearchList()
+                neighbor.setParent(currentCell)
+                cellsToSearch.put(neighbor)
+
+        # If we found food, trace back to find the first cell in the path
+        if foodCell:
+            return self.getFirstCellInPath(foodCell)
 
         # If the search failed, return a random neighbor
         return self.__data.getRandomNeighbor(head)
 
     def getFirstCellInPath(self, foodCell):
-        """ TODO COMMENT HERE """
-
+        """ Takes the found food cell as input, and traces back
+            to find the first cell in the path from the snake's head to the food.
+            Returns that cell."""
         
-        return foodCell
+        current = foodCell
+
+        # Trace back from the food cell to find the first cell in the path
+        while current.getParent():
+            parent = current.getParent()
+            if parent.isHead():
+                return current
+            
+            current = parent
+        return current
     
     def reverseSnake(self):
-        """ TODO COMMENT HERE """
+        """ Reverse the direction that the snake is moving, switching head and tail
+            by pressing the 'r' key.
+        """
+        self.__data.reverseSnakeDirection()
 
-        # TODO
-        pass
-        
 
     def playSound_eat(self):
         """ Plays an eating sound """

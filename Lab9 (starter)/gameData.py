@@ -243,7 +243,7 @@ class GameData:
             if cell.isEmpty():
                 return cell 
         # If none of them are empty, just return the first one
-        return random.choice(neighbors)
+        return random.choice(list(neighbors))
     
     ###################################
     # Methods to set the snake's mode #
@@ -299,22 +299,57 @@ class GameData:
     # Helper method(s) for reverse #
     ################################
     
-    # TODO Write method(s) here to help reverse the snake    
-    # Steps:
-    #  - Unlabel the head
-    #  - Reverse the body
-    #  - Relabel the head
-    #  - Calculate the new direction of the snake
+    # Reverse the direction that the snake is moving, switching head and tail
+    def reverseSnakeDirection(self):
+        """ Reverse the direction that the snake is moving, switching head and tail """
+        # Reverse the snake cells list
+        self.__snakeCells.reverse()
+
+        # Update the head and tail cells
+        newHead = self.getSnakeHead()
+        newTail = self.getSnakeTail()
+
+        # Update the old head and tail cells
+        newHead.becomeHead()
+        newTail.becomeWall()
+
+        # Update the body cells in between
+        for cell in self.__snakeCells[1:-1]:
+            cell.becomeBody()
+
+        # Update the current mode based on the new head and neck
+        newNeck = self.getSnakeNeck()
+        if newHead.getRow() == newNeck.getRow():
+            if newHead.getCol() < newNeck.getCol():
+                self.setDirectionWest()
+            else:
+                self.setDirectionEast()
+        else:
+            if newHead.getRow() < newNeck.getRow():
+                self.setDirectionNorth()
+            else:
+                self.setDirectionSouth()
 
     #################################
     # Methods for AI implementation #
     #################################
 
+    # Reset all cells' search information
     def resetCellsForSearch(self):
         for row in self.__board:
             for cell in row:
                 cell.clearSearchInfo()
+
+    # Get unvisited neighbors of a given cell
+    def getUnvisitedNeighbors(self, cell):
+        """ Returns a list of unvisited neighbors of the given cell """
+        neighbors = []
+        for neighbor in self.getNeighbors(cell):
+            if not neighbor.isWall():
+                neighbors.append(neighbor)
+        return neighbors
     
+           
     #########################
     # Methods for Game over #
     #########################
