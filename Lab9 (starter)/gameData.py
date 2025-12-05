@@ -35,11 +35,19 @@ class GameData:
 
         # A list of cells that currently contain food (from oldest to newest)
         self.__foodCells = [] 
+        # A list of cells that contain poison
+        self.__poisonCells = []
         # A list of cells that contain the snake (from head to tail)
         self.__snakeCells = []
 
         # Whether or not the game is over
         self.__gameOver = False
+
+        #Initialize score
+        self.__score = 0
+
+        # Store the game time
+        self.__time = 0
 
     ##########################
     # Initialization methods #
@@ -117,10 +125,18 @@ class GameData:
     def addFood(self):
         """ Adds food to an open spont on the board """
 
-        # Find a value between 1 and self.__height-1 (inclusive)
-        row = random.randrange(1, self.__height)
-        # Find a value between 1 and self.__width-1 (inclusive)
-        col = random.randrange(1, self.__width)
+        # Calculate the inner boundaries
+        minBound = 1
+        maxRow = self.__height - 1
+        maxCol = self.__width - 1
+        
+        # Safety Check: If the board is too small, stop trying to add food
+        if minBound >= maxRow or minBound >= maxCol:
+            return
+
+        # Pick a random row/col strictly strictly inside the valid area
+        row = random.randrange(minBound, maxRow)
+        col = random.randrange(minBound, maxCol)
         # Get the cell at that location
         cell = self.getCell(row, col)
 
@@ -138,6 +154,28 @@ class GameData:
         else:
             print("Not adding more food")
 
+    #################################
+    # Method to add poison to board #
+    #################################
+    def addPoison(self):
+        """ Adds poison to an open spot on the board """
+        # Calculate boundaries
+        minBound = 1
+        maxRow = self.__height - 1
+        maxCol = self.__width - 1
+
+        # Pick random location
+        row = random.randrange(minBound, maxRow)
+        col = random.randrange(minBound, maxCol)
+        cell = self.getCell(row, col)
+
+        # If empty, turn into poison
+        if cell.isEmpty():
+            cell.becomePoison()
+            self.__poisonCells.append(cell)
+            self.__freeCells -= 1
+
+
     ##########################
     # Snake movement methods #
     ##########################
@@ -146,6 +184,10 @@ class GameData:
     def moveSnakeToCellAndGrow(self, nextCell):
         """ Move the snake to the given cell and grow the snake by one cell.
             Inputs: nextCell - the cell to move the snake's head to """
+        
+        #Increase score when food is eaten
+        self.__score += 1
+
         # Change the current head to a body cell
         currentHead = self.getSnakeHead()
         currentHead.becomeBody()
@@ -161,6 +203,38 @@ class GameData:
 
         # Decrease the number of free cells
         self.__freeCells -= 1
+
+    def moveSnakeToCellAndShrink(self, nextCell):
+        """ Move snake to cell, but shrink length by removing extra tail piece. """
+        self.__score -= 1  # Decrease score when poison is eaten
+        # Standard Head Movement Logic
+        currentHead = self.getSnakeHead()
+        currentHead.becomeBody()
+        nextCell.becomeHead()
+        self.__snakeCells.insert(0, nextCell)
+
+        # Remove the poison from the tracking list
+        if nextCell in self.__poisonCells:
+            self.__poisonCells.remove(nextCell)
+
+        # Update free cells for the head move
+        self.__freeCells -= 1
+
+        # POP 1: Standard movement (tail follows head)
+        tail1 = self.getSnakeTail()
+        tail1.becomeEmpty()
+        self.__snakeCells.pop()
+        self.__freeCells += 1
+
+        # POP 2: The Poison Effect (Snake gets shorter)
+        if len(self.__snakeCells) > 2:
+            tail2 = self.getSnakeTail()
+            tail2.becomeEmpty()
+            self.__snakeCells.pop()
+            self.__freeCells += 1
+        else:
+            # If the snake is only head, Game Over
+            self.setGameOver()
 
     def moveSnakeToCell(self, nextCell):
         """ Move the snake to the given cell without growing.
@@ -383,6 +457,28 @@ class GameData:
                 out += "{}\t".format(cell.parentString())
             out += "\n"
         return out
+    
+    #######################
+    # Method to get score #
+    #######################
+    def getScore(self):
+        """ Returns the current score of the game """
+        return self.__score
+    
+    ######################
+    # Method to get time #
+    ######################
+
+    def getTime(self):
+        """ Returns the current time of the game """
+        return self.__time
+    
+    ######################
+    # Method to set time #
+    ######################
+    def setTime(self, seconds):
+        """ Sets the current time of the game """
+        self.__time = seconds
 
     class SnakeMode(Enum):
         """ An enumeration (or enum) to represent the valid

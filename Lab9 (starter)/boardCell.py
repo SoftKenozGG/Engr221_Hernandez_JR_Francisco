@@ -59,6 +59,10 @@ class BoardCell:
         """ Return whether or not this cell is part of the snake's body """
         return self.__cellType == self.CellType.BODY
     
+    def isPoison(self):
+        """ Return whether or not this cell is poison """
+        return self.__cellType == self.CellType.POISON
+    
     def getCellColor(self):
         """ Return the color associated with this type of cell """
         return {
@@ -66,7 +70,8 @@ class BoardCell:
             self.CellType.FOOD : Preferences.COLOR_FOOD,
             self.CellType.EMPTY : Preferences.COLOR_EMPTY,
             self.CellType.HEAD : Preferences.COLOR_HEAD,
-            self.CellType.BODY : Preferences.COLOR_BODY
+            self.CellType.BODY : Preferences.COLOR_BODY,
+            self.CellType.POISON : Preferences.COLOR_POISON
         }.get(self.__cellType)
     
     ###########################################
@@ -91,7 +96,11 @@ class BoardCell:
 
     def becomeBody(self):
         """ Change this cell part of the snake's body """
-        self.__cellType = self.CellType.BODY 
+        self.__cellType = self.CellType.BODY
+
+    def becomePoison(self):
+        """ Change this cell to poison """
+        self.__cellType = self.CellType.POISON 
 
     ###########################
     # Methods for search info #
@@ -142,3 +151,4 @@ class BoardCell:
         FOOD = "X"
         HEAD = "H"
         BODY = "B"
+        POISON = "P"

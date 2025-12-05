@@ -17,6 +17,7 @@ from boardDisplay import BoardDisplay
 import pygame
 from enum import Enum
 from queue import Queue
+import os
 
 class Controller():
     def __init__(self):
@@ -27,15 +28,43 @@ class Controller():
         # How many frames have passed
         self.__numCycles = 0
 
+        # Record the starting timestamp
+        self.__startTime = pygame.time.get_ticks()
+
 
         # Attempt to load any sounds and images
         try:
             pygame.mixer.init()
-            self.__audioEat = pygame.mixer.Sound(Preferences.EAT_SOUND)
-            self.__display.headImage = pygame.image.load(Preferences.HEAD_IMAGE)
-        except:
-            print("Problem error loading audio / images")
+
+
+            # 1. Get the absolute path to the folder containing THIS script
+            current_folder = os.path.dirname(os.path.abspath(__file__))
+
+
+            # 2. Build the full path to the sound file
+            # joins the folder path with "meow.wav"
+            sound_path = os.path.join(current_folder, Preferences.EAT_SOUND)
+            self.__audioEat = pygame.mixer.Sound(sound_path)
+
+            # 2b. Build the full path to the poison sound file
+            sound_path_poison = os.path.join(current_folder, Preferences.POISON_SOUND)
+            self.__audioPoison = pygame.mixer.Sound(sound_path_poison)
+
+
+            # 3. Build the full path to the image file
+            # joins the folder path with "trainer.png"
+            image_path = os.path.join(current_folder, Preferences.HEAD_IMAGE)
+            self.__display.headImage = pygame.image.load(image_path)
+
+
+        except Exception as e:
+            # FIX: Print the specific error so you know WHAT is wrong
+            print(f"Problem loading audio/images. Details: {e}")
             self.__audioEat = None
+            self.__audioPoison = None
+            # If the image fails, ensure the display doesn't crash later
+            self.__display.headImage = None
+
 
 
         # Initialize the board for a new game
@@ -73,8 +102,17 @@ class Controller():
         self.updateSnake()
         # Update the food state
         self.updateFood()
+        # Update the poison state
+        self.updatePoison()
         # Increment the number of cycles
         self.__numCycles += 1
+
+        # Calculate elapsed time
+        millis = pygame.time.get_ticks() - self.__startTime
+        seconds = millis // 1000
+        self.__data.setTime(seconds)
+
+
         # Update the display based on the new state
         self.__display.updateGraphics(self.__data)
 
@@ -139,6 +177,10 @@ class Controller():
         elif nextCell.isFood():
             self.playSound_eat()
             self.__data.moveSnakeToCellAndGrow(nextCell)
+
+        elif nextCell.isPoison():
+            self.playSound_poison()
+            self.__data.moveSnakeToCellAndShrink(nextCell)
         
         # Otherwise, just move the snake forward
         # Snake should remain the same length after moving
@@ -152,6 +194,11 @@ class Controller():
         """ Add food every FOOD_ADD_RATE cycles or if there is no food """
         if self.__data.noFood() or (self.__numCycles % Preferences.FOOD_ADD_RATE == 0):
             self.__data.addFood()
+
+    def updatePoison(self):
+        """ Add poison every POISON_ADD_RATE cycles """
+        if self.__numCycles % Preferences.POISON_ADD_RATE == 0:
+            self.__data.addPoison()
 
     def getNextCellFromBFS(self):
         """ Uses BFS to search for the food closest to the head of the snake.
@@ -229,6 +276,12 @@ class Controller():
         """ Plays an eating sound """
         if self.__audioEat:
             pygame.mixer.Sound.play(self.__audioEat)
+            pygame.mixer.music.stop()
+
+    def playSound_poison(self):
+        """ Plays a poison eating sound """
+        if self.__audioPoison:
+            pygame.mixer.Sound.play(self.__audioPoison)
             pygame.mixer.music.stop()
 
     class Keypress(Enum):

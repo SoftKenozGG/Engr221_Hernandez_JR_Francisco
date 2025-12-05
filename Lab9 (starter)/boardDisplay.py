@@ -36,9 +36,15 @@ class BoardDisplay:
                 self.drawSquare(cell)
         # You may find the below drawSquare method helpful
 
+        # Display the score
+        self.displayScore(gameData)
+
         # Draw the game over message, if appropriate
         if gameData.getGameOver():
             self.displayGameOver()
+
+        # Draw the timer
+        self.drawTimer(gameData)
 
         # Update the display
         pygame.display.update()
@@ -91,3 +97,28 @@ class BoardDisplay:
         textRect.center = (Preferences.GAME_OVER_X, Preferences.GAME_OVER_Y)
         # Place the game over text on the display
         self.__display.blit(text, textRect)
+
+    def displayScore(self, gameData):
+        """ Displays the current score on the screen """
+        
+        # Create the text
+        scoreText = "Score: " + str(gameData.getScore())
+        textSurface = Preferences.SCORE_FONT.render(scoreText, True, Preferences.SCORE_COLOR)
+        # Place the score text on the display
+        self.__display.blit(textSurface, Preferences.SCORE_LOCATION)
+
+    def drawTimer(self, gameData):
+        """ Draws the elapsed time in the top right corner """
+    
+        # Format the time
+        totalSeconds = gameData.getTime()
+        minutes = totalSeconds // 60
+        seconds = totalSeconds % 60
+        timeText = f"Time: {minutes}:{seconds:02d}" # :02d ensures "05" instead of "5"
+        # Render the text
+        textSurface = Preferences.TIMER_FONT.render(timeText, True, Preferences.TIMER_COLOR)
+        # Calculate position (Top Right)
+        textRect = textSurface.get_rect()
+        textRect.topright = (Preferences.GAME_BOARD_WIDTH - 25, 20) # 10px padding
+        # 4. Draw
+        self.__display.blit(textSurface, textRect)

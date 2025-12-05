@@ -25,6 +25,8 @@ class Preferences:
     FOOD_ADD_RATE = 25    
     # How long to sleep between updates
     SLEEP_TIME = 30
+    # Timing of poison rate
+    POISON_ADD_RATE = 40
 
     ##########
     # Sizing #
@@ -51,6 +53,7 @@ class Preferences:
     COLOR_EMPTY = pygame.Color('lavender')
     COLOR_HEAD = pygame.Color('darkorchid4')
     COLOR_BODY = pygame.Color('darkorchid1')
+    COLOR_POISON = pygame.Color('green4')
 
     ##########################
     # Game over text display #
@@ -70,3 +73,19 @@ class Preferences:
     HEAD_IMAGE = "trainer.png"
     # Sound to play when eating
     EAT_SOUND = "meow.wav"
+    #Sound when eatting poison
+    POISON_SOUND = "pain.wav"
+
+    ##############
+    # Score Text #
+    ##############
+
+    SCORE_COLOR = pygame.Color('black')
+    SCORE_FONT = pygame.font.SysFont("arial", 30, bold=True)
+    SCORE_LOCATION = (25, 20)
+
+    ##############
+    # Timer Text #
+    ##############
+    TIMER_COLOR = pygame.Color('black')
+    TIMER_FONT = pygame.font.SysFont("arial", 30, bold=True)
